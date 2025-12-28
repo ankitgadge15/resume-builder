@@ -4,66 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Resume Builder</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f4f4f4; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .section { display: none; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .active { display: block; animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .theme-selector { text-align: center; }
-        .theme-btn { display: inline-block; width: 150px; height: 100px; margin: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; transition: transform 0.3s; }
-        .theme-btn:hover { transform: scale(1.05); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        .btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
-        .btn:hover { background: #0056b3; }
-        .resume { position: relative; }
-        .resume-header { text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 20px; margin-bottom: 20px; animation: slideDown 0.5s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .summary { margin-bottom: 20px; text-align: justify; animation: fadeInUp 0.6s ease-out 0.2s both; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .experience, .education, .skills { margin-bottom: 30px; animation: fadeInUp 0.6s ease-out 0.4s both; }
-        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
-        .timeline::after { content: ''; position: absolute; width: 6px; background: #007bff; top: 0; bottom: 0; left: 50%; margin-left: -3px; }
-        .timeline-item { padding: 10px 40px; position: relative; background: inherit; width: 50%; animation: fadeInLeft 0.6s ease-out 0.6s both; }
-        .timeline-item:nth-child(odd) { left: 0; }
-        .timeline-item:nth-child(even) { left: 50%; }
-        .timeline-item::after { content: ''; position: absolute; width: 25px; height: 25px; right: -17px; background: white; border: 4px solid #007bff; top: 15px; border-radius: 50%; z-index: 1; }
-        .timeline-item:nth-child(odd)::after { left: -16px; }
-        @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-        .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .skills-list { list-style: none; }
-        .skills-list li { margin-bottom: 5px; }
-        /* Theme 1: Classic */
-        .theme-classic { --bg: white; --text: #333; --accent: #1e3a8a; --border: #e5e7eb; }
-        .theme-classic .resume-header { border-color: var(--accent); }
-        .theme-classic .timeline::after { background: var(--accent); }
-        .theme-classic .timeline-item::after { border-color: var(--accent); }
-        /* Theme 2: Modern */
-        .theme-modern { --bg: #f8fafc; --text: #1e293b; --accent: #475569; --border: #cbd5e1; font-family: 'Helvetica Neue', sans-serif; }
-        /* Theme 3: Minimal */
-        .theme-minimal { --bg: #ffffff; --text: #374151; --accent: #6b7280; --border: #f3f4f6; }
-        .theme-minimal .timeline::after { background: var(--accent); width: 2px; }
-        /* Theme 4: Corporate */
-        .theme-corporate { --bg: #fefefe; --text: #111827; --accent: #059669; --border: #d1d5db; font-weight: 500; }
-        .theme-corporate .btn { background: var(--accent); }
-        /* Theme 5: Elegant */
-        .theme-elegant { --bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); --text: #2c3e50; --accent: #d4af37; --border: #bdc3c7; font-family: 'Georgia', serif; }
-        .theme-elegant .resume-header { background: var(--bg); border-color: var(--accent); }
-        .theme-selector .theme-btn:nth-child(1) { background: linear-gradient(to bottom, #e3f2fd, #1e3a8a); color: white; } /* Classic */
-        .theme-selector .theme-btn:nth-child(2) { background: linear-gradient(to bottom, #f1f5f9, #475569); color: white; } /* Modern */
-        .theme-selector .theme-btn:nth-child(3) { background: linear-gradient(to bottom, #ffffff, #6b7280); color: #374151; } /* Minimal */
-        .theme-selector .theme-btn:nth-child(4) { background: linear-gradient(to bottom, #f0fdf4, #059669); color: white; } /* Corporate */
-        .theme-selector .theme-btn:nth-child(5) { background: linear-gradient(to bottom, #f5f7fa, #d4af37); color: #2c3e50; } /* Elegant */
-        .resume { background: var(--bg, white); color: var(--text, #333); border: 1px solid var(--border, #e5e7eb); padding: 40px; }
-        .export-btn { position: fixed; top: 20px; right: 20px; z-index: 1000; }
-    </style>
 </head>
 <body>
     <div class="container">
+        
         <div id="themeSection" class="section active">
             <h1 style="text-align: center; margin-bottom: 30px;">Select a Resume Theme</h1>
             <div class="theme-selector">
@@ -106,11 +52,11 @@
                         <input type="text" class="exp-position" placeholder="e.g., Intern at Shri Gurudev Ayurved College">
                         <label>Duration</label>
                         <input type="text" class="exp-duration" placeholder="e.g., Nov 2024 - May 2025">
-                        <label>Description (Bullets, comma-separated)</label>
-                        <textarea class="exp-desc" rows="3" placeholder="e.g., Gained hands-on training..."></textarea>
+                        <label>Description (comma-separated for bullets)</label>
+                        <textarea class="exp-desc" rows="3" placeholder="e.g., Gained hands-on training, Managed patient records"></textarea>
                     </div>
                 </div>
-                <button type="button" class="btn" onclick="addExperience()">Add Experience</button>
+                <button type="button" class="btn secondary" onclick="addExperience()">+ Add Experience</button>
 
                 <h3>Education</h3>
                 <div id="educationEntries">
@@ -123,7 +69,7 @@
                         <input type="text" class="edu-year" placeholder="e.g., 2024">
                     </div>
                 </div>
-                <button type="button" class="btn" onclick="addEducation()">Add Education</button>
+                <button type="button" class="btn secondary" onclick="addEducation()">+ Add Education</button>
 
                 <h3>Skills</h3>
                 <div class="form-group">
@@ -131,147 +77,21 @@
                     <textarea id="skills" rows="3" placeholder="e.g., Patient consultation, Panchakarma procedures, IV cannulation"></textarea>
                 </div>
 
-                <button type="submit" class="btn">Generate Resume</button>
+                <div class="action-buttons">
+                    <button type="submit" class="btn primary">Generate Resume</button>
+                </div>
             </form>
         </div>
 
         <div id="resumeSection" class="section">
-            <button class="btn export-btn" onclick="exportPDF()">Download PDF</button>
+            <div class="preview-controls">
+                <button class="btn secondary" onclick="location.reload()">Back to Start</button>
+                <button class="btn export-btn" onclick="exportPDF()">Download PDF</button>
+            </div>
             <div id="resume" class="resume"></div>
         </div>
     </div>
 
-    <script>
-        let currentTheme = 1;
-        let experienceCount = 1;
-        let educationCount = 1;
-
-        function selectTheme(themeId) {
-    currentTheme = themeId;
-
-    // Hide theme selector and show form
-    document.getElementById('themeSection').classList.remove('active');
-    document.getElementById('formSection').classList.add('active');
-
-    // Apply selected theme class (remove previous theme classes first)
-    const themes = ['classic', 'modern', 'minimal', 'corporate', 'elegant'];
-    document.body.classList.remove('theme-classic', 'theme-modern', 'theme-minimal', 'theme-corporate', 'theme-elegant');
-    document.body.classList.add('theme-' + themes[themeId - 1]);
-        }
-
-        function addExperience() {
-            experienceCount++;
-            const container = document.getElementById('experienceEntries');
-            const div = document.createElement('div');
-            div.className = 'form-group';
-            div.innerHTML = `
-                <label>Position ${experienceCount}</label>
-                <input type="text" class="exp-position" placeholder="Position">
-                <label>Duration</label>
-                <input type="text" class="exp-duration" placeholder="Duration">
-                <label>Description</label>
-                <textarea class="exp-desc" rows="3" placeholder="Description"></textarea>
-                <button type="button" class="btn" onclick="this.parentElement.remove()">Remove</button>
-            `;
-            container.appendChild(div);
-        }
-
-        function addEducation() {
-            educationCount++;
-            const container = document.getElementById('educationEntries');
-            const div = document.createElement('div');
-            div.className = 'form-group';
-            div.innerHTML = `
-                <label>Degree ${educationCount}</label>
-                <input type="text" class="edu-degree" placeholder="Degree">
-                <label>Institution</label>
-                <input type="text" class="edu-institution" placeholder="Institution">
-                <label>Year</label>
-                <input type="text" class="edu-year" placeholder="Year">
-                <button type="button" class="btn" onclick="this.parentElement.remove()">Remove</button>
-            `;
-            container.appendChild(div);
-        }
-
-        document.getElementById('resumeForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            generateResume();
-            document.getElementById('formSection').classList.remove('active');
-            document.getElementById('resumeSection').classList.add('active');
-        });
-
-        function generateResume() {
-            const name = document.getElementById('name').value;
-            const title = document.getElementById('title').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const summary = document.getElementById('summary').value;
-            const skills = document.getElementById('skills').value.split(',').map(s => s.trim()).filter(s => s);
-
-            let expHTML = '';
-            const expPositions = document.querySelectorAll('.exp-position');
-            const expDurations = document.querySelectorAll('.exp-duration');
-            const expDescs = document.querySelectorAll('.exp-desc');
-            for (let i = 0; i < expPositions.length; i++) {
-                const bullets = expDescs[i].value.split(',').map(b => `<li>${b.trim()}</li>`).join('');
-                expHTML += `
-                    <div class="timeline-item">
-                        <h3>${expPositions[i].value}</h3>
-                        <p><em>${expDurations[i].value}</em></p>
-                        <ul>${bullets}</ul>
-                    </div>
-                `;
-            }
-
-            let eduHTML = '';
-            const eduDegrees = document.querySelectorAll('.edu-degree');
-            const eduInstitutions = document.querySelectorAll('.edu-institution');
-            const eduYears = document.querySelectorAll('.edu-year');
-            for (let i = 0; i < eduDegrees.length; i++) {
-                eduHTML += `<p><strong>${eduDegrees[i].value}</strong> - ${eduInstitutions[i].value}, ${eduYears[i].value}</p>`;
-            }
-
-            const skillsHTML = `
-                <div class="skills-grid">
-                    <ul class="skills-list">\( {skills.slice(0, Math.ceil(skills.length/2)).map(s => `<li> \){s}</li>`).join('')}</ul>
-                    <ul class="skills-list">\( {skills.slice(Math.ceil(skills.length/2)).map(s => `<li> \){s}</li>`).join('')}</ul>
-                </div>
-            `;
-
-            const resumeHTML = `
-                <div class="resume-header">
-                    <h1>${name}</h1>
-                    <h2>${title}</h2>
-                    <p>${phone} | ${email}</p>
-                </div>
-                \( {summary ? `<div class="summary"><p> \){summary}</p></div>` : ''}
-                <div class="experience">
-                    <h2>Experience</h2>
-                    <div class="timeline">${expHTML}</div>
-                </div>
-                <div class="education">
-                    <h2>Education</h2>
-                    ${eduHTML}
-                </div>
-                <div class="skills">
-                    <h2>Skills</h2>
-                    ${skillsHTML}
-                </div>
-            `;
-            document.getElementById('resume').innerHTML = resumeHTML;
-        }
-
-        function exportPDF() {
-            const element = document.getElementById('resume');
-            const opt = {
-                margin: 1,
-                filename: 'resume.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
