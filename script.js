@@ -11,40 +11,35 @@ const dummyData = {
         { position: "Senior Project Lead", duration: "2014 - 2018", description: "Delivered 12 major products on time, Specialized in stakeholder management, Increased client satisfaction by 15%" }
     ],
     education: [
-        { degree: "Master of Business Administration (MBA)", institution: "State Business School", year: "2014" },
-        { degree: "B.Sc. Computer Science", institution: "Tech University", year: "2012" }
+        { degree: "Master of Business Administration (MBA)", institution: "State Business School", year: "2014" }
     ],
-    skills: ["Strategic Leadership", "Agile & Scrum", "Risk Management", "Budgeting", "Product Lifecycle", "Stakeholder Relations"]
+    skills: ["Strategic Leadership", "Agile & Scrum", "Risk Management", "Budgeting"]
 };
 
-// Initialize preview AND add initial form fields
 window.onload = () => {
     previewTheme(1);
-    addExperience(); // Add the first empty experience field
-    addEducation();  // Add the first empty education field
+    addExperience();
+    addEducation();
 };
 
 function previewTheme(id) {
     currentTheme = id;
     const themes = ['classic', 'modern', 'minimal', 'corporate', 'elegant'];
     document.body.className = 'theme-' + themes[id - 1];
-    
     const previewBox = document.getElementById('livePreview');
     previewBox.innerHTML = buildResumeHTML(dummyData);
     setTimeout(() => autoScaleFont(previewBox), 50);
 }
 
+// Fixed navigation
 function goToForm() {
     document.getElementById('themeSection').classList.remove('active');
     document.getElementById('formSection').classList.add('active');
 }
-
 function goBackToThemes() {
     document.getElementById('formSection').classList.remove('active');
     document.getElementById('themeSection').classList.add('active');
 }
-
-// FIXED: Now correctly targets the section IDs
 function editData() {
     document.getElementById('resumeSection').classList.remove('active');
     document.getElementById('formSection').classList.add('active');
@@ -55,21 +50,12 @@ function addExperience() {
     const div = document.createElement('div');
     div.className = 'entry-card';
     div.innerHTML = `
-        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer; font-size:1.2rem;">&times;</button>
+        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer;">&times;</button>
         <div class="form-group-row">
-            <div class="form-group">
-                <label>Job Title</label>
-                <input type="text" class="exp-position" placeholder="e.g. Lead Designer" required>
-            </div>
-            <div class="form-group">
-                <label>Duration</label>
-                <input type="text" class="exp-duration" placeholder="e.g. 2020 - Present" required>
-            </div>
+            <input type="text" class="exp-position" placeholder="Job Title" required>
+            <input type="text" class="exp-duration" placeholder="Duration" required>
         </div>
-        <div class="form-group">
-            <label>Description (comma separated for bullet points)</label>
-            <textarea class="exp-desc" rows="2" placeholder="e.g. Led a team of 4, Increased sales by 10%"></textarea>
-        </div>
+        <textarea class="exp-desc" rows="2" placeholder="Responsibilities (comma separated)"></textarea>
     `;
     container.appendChild(div);
 }
@@ -79,28 +65,18 @@ function addEducation() {
     const div = document.createElement('div');
     div.className = 'entry-card';
     div.innerHTML = `
-        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer; font-size:1.2rem;">&times;</button>
+        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer;">&times;</button>
         <div class="form-group-row">
-            <div class="form-group">
-                <label>Degree</label>
-                <input type="text" class="edu-degree" placeholder="e.g. Bachelor of Science" required>
-            </div>
-            <div class="form-group">
-                <label>Year</label>
-                <input type="text" class="edu-year" placeholder="e.g. 2018" required>
-            </div>
+            <input type="text" class="edu-degree" placeholder="Degree" required>
+            <input type="text" class="edu-year" placeholder="Year" required>
         </div>
-        <div class="form-group">
-            <label>Institution</label>
-            <input type="text" class="edu-institution" placeholder="e.g. Oxford University" required>
-        </div>
+        <input type="text" class="edu-institution" placeholder="Institution" required>
     `;
     container.appendChild(div);
 }
 
 document.getElementById('resumeForm').addEventListener('submit', (e) => {
     e.preventDefault();
-    
     const data = {
         name: document.getElementById('name').value,
         title: document.getElementById('title').value,
@@ -119,14 +95,11 @@ document.getElementById('resumeForm').addEventListener('submit', (e) => {
             institution: card.querySelector('.edu-institution').value
         }))
     };
-
     const target = document.getElementById('resume');
     target.style.fontSize = '16px'; 
     target.innerHTML = buildResumeHTML(data);
-    
     document.getElementById('formSection').classList.remove('active');
     document.getElementById('resumeSection').classList.add('active');
-    
     setTimeout(() => autoScaleFont(target), 100);
 });
 
@@ -135,37 +108,21 @@ function buildResumeHTML(data) {
         <div class="resume-header">
             <h1>${data.name}</h1>
             <h2>${data.title}</h2>
-            <p style="font-size:0.9rem">${data.phone} &nbsp; | &nbsp; ${data.email}</p>
+            <p>${data.phone} | ${data.email}</p>
         </div>
-        
-        <div class="res-section-title">Professional Summary</div>
-        <p style="text-align: justify;">${data.summary}</p>
-        
-        <div class="res-section-title">Work Experience</div>
+        <div class="res-section-title">Summary</div>
+        <p>${data.summary}</p>
+        <div class="res-section-title">Experience</div>
         ${data.experience.map(exp => `
-            <div style="margin-bottom:12px">
-                <div style="display:flex; justify-content:space-between; font-weight:bold;">
-                    <span>${exp.position}</span>
-                    <span>${exp.duration}</span>
-                </div>
-                <ul style="margin-left:20px; font-size:0.95em; margin-top:4px;">
-                    ${exp.description.split(',').map(d => d.trim() ? `<li>${d}</li>` : '').join('')}
-                </ul>
+            <div style="margin-bottom:10px">
+                <strong>${exp.position}</strong> (${exp.duration})
+                <ul style="margin-left:20px; font-size:0.9em">${exp.description.split(',').map(d => `<li>${d.trim()}</li>`).join('')}</ul>
             </div>
         `).join('')}
-        
         <div class="res-section-title">Education</div>
-        ${data.education.map(edu => `
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span><strong>${edu.degree}</strong>, ${edu.institution}</span>
-                <span>${edu.year}</span>
-            </div>
-        `).join('')}
-        
-        <div class="res-section-title">Technical Skills</div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-            ${data.skills.map(s => `<span style="background:#f1f5f9; padding:4px 10px; border:1px solid #e2e8f0; border-radius:4px; font-size:0.85rem">${s}</span>`).join('')}
-        </div>
+        ${data.education.map(edu => `<p><strong>${edu.degree}</strong> - ${edu.institution} (${edu.year})</p>`).join('')}
+        <div class="res-section-title">Skills</div>
+        <p>${data.skills.join(', ')}</p>
     `;
 }
 
@@ -180,12 +137,10 @@ function autoScaleFont(element) {
 
 function exportPDF() {
     const element = document.getElementById('resume');
-    const opt = {
+    html2pdf().set({
         margin: 0,
-        filename: 'resume_A4.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true },
+        filename: 'resume.pdf',
+        html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+    }).from(element).save();
 }
