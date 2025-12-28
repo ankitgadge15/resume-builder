@@ -1,6 +1,5 @@
 let currentTheme = 1;
 
-// Sample data for the selection screen preview
 const dummyData = {
     name: "Johnathan Doe",
     title: "Project Management Director",
@@ -18,8 +17,12 @@ const dummyData = {
     skills: ["Strategic Leadership", "Agile & Scrum", "Risk Management", "Budgeting", "Product Lifecycle", "Stakeholder Relations"]
 };
 
-// Initialize preview
-window.onload = () => previewTheme(1);
+// Initialize preview AND add initial form fields
+window.onload = () => {
+    previewTheme(1);
+    addExperience(); // Add the first empty experience field
+    addEducation();  // Add the first empty education field
+};
 
 function previewTheme(id) {
     currentTheme = id;
@@ -41,6 +44,7 @@ function goBackToThemes() {
     document.getElementById('themeSection').classList.add('active');
 }
 
+// FIXED: Now correctly targets the section IDs
 function editData() {
     document.getElementById('resumeSection').classList.remove('active');
     document.getElementById('formSection').classList.add('active');
@@ -51,12 +55,21 @@ function addExperience() {
     const div = document.createElement('div');
     div.className = 'entry-card';
     div.innerHTML = `
-        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer;">&times; Remove</button>
+        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer; font-size:1.2rem;">&times;</button>
         <div class="form-group-row">
-            <input type="text" class="exp-position" placeholder="Job Title" required>
-            <input type="text" class="exp-duration" placeholder="Duration" required>
+            <div class="form-group">
+                <label>Job Title</label>
+                <input type="text" class="exp-position" placeholder="e.g. Lead Designer" required>
+            </div>
+            <div class="form-group">
+                <label>Duration</label>
+                <input type="text" class="exp-duration" placeholder="e.g. 2020 - Present" required>
+            </div>
         </div>
-        <textarea class="exp-desc" rows="2" placeholder="Responsibilities (comma separated)"></textarea>
+        <div class="form-group">
+            <label>Description (comma separated for bullet points)</label>
+            <textarea class="exp-desc" rows="2" placeholder="e.g. Led a team of 4, Increased sales by 10%"></textarea>
+        </div>
     `;
     container.appendChild(div);
 }
@@ -66,12 +79,21 @@ function addEducation() {
     const div = document.createElement('div');
     div.className = 'entry-card';
     div.innerHTML = `
-        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer;">&times; Remove</button>
+        <button type="button" onclick="this.parentElement.remove()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:red; cursor:pointer; font-size:1.2rem;">&times;</button>
         <div class="form-group-row">
-            <input type="text" class="edu-degree" placeholder="Degree" required>
-            <input type="text" class="edu-year" placeholder="Year" required>
+            <div class="form-group">
+                <label>Degree</label>
+                <input type="text" class="edu-degree" placeholder="e.g. Bachelor of Science" required>
+            </div>
+            <div class="form-group">
+                <label>Year</label>
+                <input type="text" class="edu-year" placeholder="e.g. 2018" required>
+            </div>
         </div>
-        <input type="text" class="edu-institution" placeholder="Institution" required>
+        <div class="form-group">
+            <label>Institution</label>
+            <input type="text" class="edu-institution" placeholder="e.g. Oxford University" required>
+        </div>
     `;
     container.appendChild(div);
 }
@@ -99,7 +121,7 @@ document.getElementById('resumeForm').addEventListener('submit', (e) => {
     };
 
     const target = document.getElementById('resume');
-    target.style.fontSize = '16px'; // Reset for measurement
+    target.style.fontSize = '16px'; 
     target.innerHTML = buildResumeHTML(data);
     
     document.getElementById('formSection').classList.remove('active');
