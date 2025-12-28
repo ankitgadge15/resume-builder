@@ -1,61 +1,72 @@
-:root {
-    --a4-width: 210mm;
-    --a4-height: 297mm;
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; padding: 20px; }
+body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #e9ecef; padding: 20px; transition: background 0.3s; }
 
-/* ... (Previous layout styles for container and sections remain the same) ... */
+/* Layout */
+.container { max-width: 1200px; margin: 0 auto; }
+.section { display: none; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.active { display: block; animation: fadeIn 0.4s ease-in; }
 
-.container { max-width: 1100px; margin: 0 auto; }
-.section { display: none; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-.active { display: block; }
+/* Split Layout for Theme Selection */
+.selection-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.theme-controls { padding-right: 20px; border-right: 1px solid #eee; }
+.theme-preview-wrapper { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+.theme-preview-wrapper h3 { margin-bottom: 15px; width: 100%; text-align: center; }
 
-.resume-outer-container { background: #4b5563; padding: 40px 0; display: flex; justify-content: center; overflow: hidden; border-radius: 8px; }
-.resume { 
-    width: var(--a4-width); 
-    height: var(--a4-height); 
-    background: white; 
-    padding: 20mm 15mm; 
-    overflow: hidden; 
-    box-sizing: border-box;
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+/* Scaled Down Preview (Zoom Effect) */
+.scale-down {
+    transform: scale(0.55); /* Shrink to 55% size */
+    transform-origin: top center;
+    width: 210mm; /* A4 width */
+    min-height: 297mm; /* A4 height */
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin-bottom: -45%; /* Compensate for empty space caused by scaling */
 }
 
-/* --- THEME SPECIFIC OVERRIDES --- */
+/* Responsive: Stack on mobile */
+@media (max-width: 900px) {
+    .selection-layout { grid-template-columns: 1fr; }
+    .theme-controls { border-right: none; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+    .scale-down { transform: scale(0.45); margin-bottom: -150%; }
+}
 
-/* 1. CLASSIC: Professional Blue with Bordered Header */
-.theme-classic .resume { --accent: #1e3a8a; border-top: 8px solid var(--accent); }
-.theme-classic .resume-header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* 2. MODERN: Sidebar-style look (Accent box for Header) */
-.theme-modern .resume { --accent: #2d3748; background: #fcfcfc; }
-.theme-modern .resume-header { background: var(--accent); color: white; margin: -20mm -15mm 20px -15mm; padding: 30px 15mm; }
-.theme-modern .resume-header h1, .theme-modern .resume-header h2 { color: white; }
+/* Buttons */
+.theme-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.theme-btn { flex: 1 1 40%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: white; transition: all 0.2s; }
+.theme-btn:hover { border-color: #007bff; background: #f0f7ff; transform: translateY(-2px); }
 
-/* 3. MINIMAL: High Contrast & Spaced */
-.theme-minimal .resume { --accent: #000; font-family: 'Courier New', Courier, monospace; }
-.theme-minimal .resume-header { text-align: left; }
-.theme-minimal .res-section-title { border-bottom: 1px solid #000; border-top: 1px solid #000; padding: 5px 0; }
+.confirm-selection { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+.btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: opacity 0.2s; }
+.btn.primary { background: #007bff; color: white; font-size: 16px; padding: 12px 25px; }
+.btn.secondary { background: #6c757d; color: white; }
+.btn:hover { opacity: 0.9; }
 
-/* 4. CORPORATE: Green with Left-aligned Accent */
-.theme-corporate .resume { --accent: #065f46; }
-.theme-corporate .resume-header { border-left: 10px solid var(--accent); padding-left: 20px; }
+/* Form Styles */
+.form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+.action-buttons { margin-top: 20px; text-align: center; }
 
-/* 5. ELEGANT: Serif Fonts & Gold Accents */
-.theme-elegant .resume { --accent: #926c15; font-family: 'Georgia', serif; }
-.theme-elegant .resume-header { text-align: center; font-style: italic; border-bottom: 1px double var(--accent); }
+/* Resume Base Styles */
+.resume { background: var(--bg, white); color: var(--text, #333); padding: 40px; font-family: var(--font, Arial, sans-serif); }
+.timeline-item { margin-bottom: 15px; }
 
-/* Common Resume Elements */
-.resume h1 { color: var(--accent); font-size: 2.2rem; margin-bottom: 5px; }
-.resume h2 { font-size: 1.1rem; font-weight: 400; color: #666; }
-.res-section-title { margin: 15px 0 10px; text-transform: uppercase; font-size: 0.9rem; font-weight: 700; color: var(--accent); }
+/* --- THEMES --- */
+.theme-classic { --bg: white; --text: #222; --accent: #1e3a8a; }
+.theme-classic .resume-header { border-bottom: 3px solid var(--accent); color: var(--accent); text-align: center; padding-bottom: 15px; margin-bottom: 20px; }
 
-/* (Keep previous btn, form, and scale-down styles) */
-.scale-down { transform: scale(0.48); transform-origin: top center; margin-bottom: -150mm; }
-.form-group-row { display: flex; gap: 15px; }
-.entry-card { background: #f8fafc; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; position: relative; }
-.btn { padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; }
-.btn.primary { background: #2563eb; color: #fff; width: 100%; }
-.btn.secondary { background: #64748b; color: #fff; }
+.theme-modern { --bg: #f8fafc; --text: #1e293b; --accent: #475569; --font: 'Helvetica Neue', sans-serif; }
+.theme-modern .resume-header { border-left: 5px solid var(--accent); padding-left: 20px; margin-bottom: 20px; }
+
+.theme-minimal { --bg: white; --text: #374151; --accent: #6b7280; }
+.theme-minimal .resume-header { text-align: left; margin-bottom: 30px; }
+.theme-minimal h3 { text-transform: uppercase; font-size: 14px; letter-spacing: 1px; color: var(--accent); }
+
+.theme-corporate { --bg: #fff; --text: #111; --accent: #059669; }
+.theme-corporate h1 { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+
+.theme-elegant { --bg: linear-gradient(135deg, #fdfbf7 0%, #fff 100%); --text: #2c3e50; --accent: #d4af37; --font: 'Georgia', serif; }
+.theme-elegant .resume-header { border-bottom: 1px double var(--accent); text-align: center; font-style: italic; }
