@@ -7,22 +7,41 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body>
-    <div class="container">
+<body class="theme-classic"> <div class="container">
         
-        <div id="themeSection" class="section active">
-            <h1 style="text-align: center; margin-bottom: 30px;">Select a Resume Theme</h1>
-            <div class="theme-selector">
-                <button class="theme-btn" onclick="selectTheme(1)">Classic</button>
-                <button class="theme-btn" onclick="selectTheme(2)">Modern</button>
-                <button class="theme-btn" onclick="selectTheme(3)">Minimal</button>
-                <button class="theme-btn" onclick="selectTheme(4)">Corporate</button>
-                <button class="theme-btn" onclick="selectTheme(5)">Elegant</button>
+        <div id="themeSection" class="section active full-width">
+            <h1 style="text-align: center; margin-bottom: 20px;">Choose Your Template</h1>
+            
+            <div class="selection-layout">
+                <div class="theme-controls">
+                    <h3>1. Select a Style</h3>
+                    <div class="theme-list">
+                        <button class="theme-btn" onclick="previewTheme(1)">Classic</button>
+                        <button class="theme-btn" onclick="previewTheme(2)">Modern</button>
+                        <button class="theme-btn" onclick="previewTheme(3)">Minimal</button>
+                        <button class="theme-btn" onclick="previewTheme(4)">Corporate</button>
+                        <button class="theme-btn" onclick="previewTheme(5)">Elegant</button>
+                    </div>
+                    <div class="confirm-selection">
+                        <p>Happy with this style?</p>
+                        <button class="btn primary" onclick="goToForm()">Next: Edit Details &rarr;</button>
+                    </div>
+                </div>
+
+                <div class="theme-preview-wrapper">
+                    <h3>Live Preview</h3>
+                    <div id="livePreview" class="resume scale-down">
+                        </div>
+                </div>
             </div>
         </div>
 
         <div id="formSection" class="section">
-            <h2>Edit Your Information</h2>
+            <div class="form-header">
+                <button class="btn secondary" onclick="goBackToThemes()">&larr; Change Theme</button>
+                <h2>Enter Your Details</h2>
+            </div>
+            
             <form id="resumeForm">
                 <div class="form-group">
                     <label>Full Name</label>
@@ -42,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label>Professional Summary</label>
-                    <textarea id="summary" rows="4" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."></textarea>
+                    <textarea id="summary" rows="4" placeholder="Brief summary of your experience..."></textarea>
                 </div>
 
                 <h3>Experience</h3>
@@ -53,7 +72,7 @@
                         <label>Duration</label>
                         <input type="text" class="exp-duration" placeholder="e.g., Jan 2020 - Present">
                         <label>Description (comma-separated for bullets)</label>
-                        <textarea class="exp-desc" rows="3" placeholder="e.g., Led a team of 5 developers, Increased system efficiency by 20%, Implemented agile methodologies"></textarea>
+                        <textarea class="exp-desc" rows="3" placeholder="e.g., Led a team of 5, Increased efficiency"></textarea>
                     </div>
                 </div>
                 <button type="button" class="btn secondary" onclick="addExperience()">+ Add Experience</button>
@@ -62,9 +81,9 @@
                 <div id="educationEntries">
                     <div class="form-group">
                         <label>Degree 1</label>
-                        <input type="text" class="edu-degree" placeholder="e.g., Bachelor of Science in Computer Science">
+                        <input type="text" class="edu-degree" placeholder="e.g., MBA">
                         <label>Institution</label>
-                        <input type="text" class="edu-institution" placeholder="e.g., University of Lorem Ipsum">
+                        <input type="text" class="edu-institution" placeholder="e.g., Business School">
                         <label>Year</label>
                         <input type="text" class="edu-year" placeholder="e.g., 2019">
                     </div>
@@ -74,18 +93,18 @@
                 <h3>Skills</h3>
                 <div class="form-group">
                     <label>Skills (comma-separated)</label>
-                    <textarea id="skills" rows="3" placeholder="e.g., Project Management, Python, Public Speaking, Strategic Planning"></textarea>
+                    <textarea id="skills" rows="3" placeholder="e.g., Leadership, Python, Public Speaking"></textarea>
                 </div>
 
                 <div class="action-buttons">
-                    <button type="submit" class="btn primary">Generate Resume</button>
+                    <button type="submit" class="btn primary">Generate Final Resume</button>
                 </div>
             </form>
         </div>
 
         <div id="resumeSection" class="section">
             <div class="preview-controls">
-                <button class="btn secondary" onclick="location.reload()">Back to Start</button>
+                <button class="btn secondary" onclick="document.getElementById('formSection').classList.add('active'); document.getElementById('resumeSection').classList.remove('active');">Edit Data</button>
                 <button class="btn export-btn" onclick="exportPDF()">Download PDF</button>
             </div>
             <div id="resume" class="resume"></div>

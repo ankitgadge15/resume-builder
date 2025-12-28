@@ -1,84 +1,72 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f4f4f4; padding: 20px; }
+body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #e9ecef; padding: 20px; transition: background 0.3s; }
 
 /* Layout */
 .container { max-width: 1200px; margin: 0 auto; }
-.section { display: none; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-.active { display: block; animation: fadeIn 0.5s ease-in; }
+.section { display: none; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.active { display: block; animation: fadeIn 0.4s ease-in; }
+
+/* Split Layout for Theme Selection */
+.selection-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.theme-controls { padding-right: 20px; border-right: 1px solid #eee; }
+.theme-preview-wrapper { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+.theme-preview-wrapper h3 { margin-bottom: 15px; width: 100%; text-align: center; }
+
+/* Scaled Down Preview (Zoom Effect) */
+.scale-down {
+    transform: scale(0.55); /* Shrink to 55% size */
+    transform-origin: top center;
+    width: 210mm; /* A4 width */
+    min-height: 297mm; /* A4 height */
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin-bottom: -45%; /* Compensate for empty space caused by scaling */
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 900px) {
+    .selection-layout { grid-template-columns: 1fr; }
+    .theme-controls { border-right: none; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+    .scale-down { transform: scale(0.45); margin-bottom: -150%; }
+}
 
 /* Animations */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-
-/* Theme Selector Buttons */
-.theme-selector { text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
-.theme-btn { width: 150px; height: 100px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; transition: transform 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-.theme-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-
-/* Theme Colors for Buttons */
-.theme-btn:nth-child(1) { background: linear-gradient(to bottom, #e3f2fd, #1e3a8a); color: #1e3a8a; } /* Classic */
-.theme-btn:nth-child(2) { background: linear-gradient(to bottom, #f1f5f9, #475569); color: #1e293b; } /* Modern */
-.theme-btn:nth-child(3) { background: linear-gradient(to bottom, #ffffff, #6b7280); color: #374151; border: 1px solid #ddd; } /* Minimal */
-.theme-btn:nth-child(4) { background: linear-gradient(to bottom, #f0fdf4, #059669); color: #064e3b; } /* Corporate */
-.theme-btn:nth-child(5) { background: linear-gradient(to bottom, #f5f7fa, #d4af37); color: #2c3e50; } /* Elegant */
-
-/* Form Elements */
-.form-group { margin-bottom: 15px; background: #fafafa; padding: 15px; border-radius: 4px; border: 1px solid #eee; }
-.form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
-.form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
-.form-group input:focus, .form-group textarea:focus { border-color: #007bff; outline: none; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Buttons */
-.btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; font-size: 14px; transition: background 0.3s; }
-.btn.primary { background: #007bff; color: white; width: 100%; font-size: 16px; margin-top: 10px; }
+.theme-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.theme-btn { flex: 1 1 40%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: white; transition: all 0.2s; }
+.theme-btn:hover { border-color: #007bff; background: #f0f7ff; transform: translateY(-2px); }
+
+.confirm-selection { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+.btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: opacity 0.2s; }
+.btn.primary { background: #007bff; color: white; font-size: 16px; padding: 12px 25px; }
 .btn.secondary { background: #6c757d; color: white; }
 .btn:hover { opacity: 0.9; }
-.preview-controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
-.export-btn { background: #28a745; color: white; }
 
-/* Resume Layout Logic */
-.resume { position: relative; background: var(--bg, white); color: var(--text, #333); border: 1px solid var(--border, #e5e7eb); padding: 40px; min-height: 800px; }
-.resume-header { text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 20px; margin-bottom: 20px; animation: slideDown 0.5s ease-out; }
-.summary { margin-bottom: 20px; text-align: justify; animation: fadeInUp 0.6s ease-out 0.2s both; }
-.experience, .education, .skills { margin-bottom: 30px; animation: fadeInUp 0.6s ease-out 0.4s both; }
+/* Form Styles */
+.form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+.action-buttons { margin-top: 20px; text-align: center; }
 
-/* Timeline (Experience) */
-.timeline { position: relative; max-width: 100%; margin: 0 auto; }
-.timeline::after { content: ''; position: absolute; width: 4px; background: #e9ecef; top: 0; bottom: 0; left: 20px; margin-left: -3px; }
-.timeline-item { padding: 10px 40px; position: relative; background: inherit; width: 100%; animation: fadeInLeft 0.6s ease-out 0.6s both; }
-.timeline-item::after { content: ''; position: absolute; width: 16px; height: 16px; left: 11px; background: white; border: 4px solid #007bff; top: 15px; border-radius: 50%; z-index: 1; }
-
-/* Skills Grid */
-.skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-.skills-list { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
-.skill-tag { background: #eee; padding: 5px 10px; border-radius: 15px; font-size: 0.9em; }
+/* Resume Base Styles */
+.resume { background: var(--bg, white); color: var(--text, #333); padding: 40px; font-family: var(--font, Arial, sans-serif); }
+.timeline-item { margin-bottom: 15px; }
 
 /* --- THEMES --- */
+.theme-classic { --bg: white; --text: #222; --accent: #1e3a8a; }
+.theme-classic .resume-header { border-bottom: 3px solid var(--accent); color: var(--accent); text-align: center; padding-bottom: 15px; margin-bottom: 20px; }
 
-/* Theme 1: Classic */
-.theme-classic { --bg: white; --text: #333; --accent: #1e3a8a; --border: #e5e7eb; }
-.theme-classic .resume-header { border-color: var(--accent); color: var(--accent); }
-.theme-classic .timeline-item::after { border-color: var(--accent); }
+.theme-modern { --bg: #f8fafc; --text: #1e293b; --accent: #475569; --font: 'Helvetica Neue', sans-serif; }
+.theme-modern .resume-header { border-left: 5px solid var(--accent); padding-left: 20px; margin-bottom: 20px; }
 
-/* Theme 2: Modern */
-.theme-modern { --bg: #f8fafc; --text: #1e293b; --accent: #475569; --border: #cbd5e1; font-family: 'Helvetica Neue', sans-serif; }
-.theme-modern .resume-header { text-align: left; border-bottom: 5px solid var(--accent); }
-.theme-modern .timeline::after { background: var(--accent); }
+.theme-minimal { --bg: white; --text: #374151; --accent: #6b7280; }
+.theme-minimal .resume-header { text-align: left; margin-bottom: 30px; }
+.theme-minimal h3 { text-transform: uppercase; font-size: 14px; letter-spacing: 1px; color: var(--accent); }
 
-/* Theme 3: Minimal */
-.theme-minimal { --bg: #ffffff; --text: #374151; --accent: #6b7280; --border: #f3f4f6; }
-.theme-minimal .resume-header { border: none; text-align: left; margin-bottom: 10px; }
-.theme-minimal .timeline::after { display: none; }
-.theme-minimal .timeline-item::after { display: none; }
-.theme-minimal .timeline-item { padding-left: 0; }
-
-/* Theme 4: Corporate */
-.theme-corporate { --bg: #fefefe; --text: #111827; --accent: #059669; --border: #d1d5db; font-weight: 500; }
+.theme-corporate { --bg: #fff; --text: #111; --accent: #059669; }
 .theme-corporate h1 { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
 
-/* Theme 5: Elegant */
-.theme-elegant { --bg: linear-gradient(135deg, #fdfbf7 0%, #fff 100%); --text: #2c3e50; --accent: #d4af37; --border: #bdc3c7; font-family: 'Georgia', serif; }
-.theme-elegant .resume-header { border-bottom: 1px double var(--accent); }
-.theme-elegant h1 { font-style: italic; }
+.theme-elegant { --bg: linear-gradient(135deg, #fdfbf7 0%, #fff 100%); --text: #2c3e50; --accent: #d4af37; --font: 'Georgia', serif; }
+.theme-elegant .resume-header { border-bottom: 1px double var(--accent); text-align: center; font-style: italic; }
