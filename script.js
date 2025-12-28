@@ -26,11 +26,11 @@ function addExperience() {
             <label>Position ${experienceCount}</label>
             <button type="button" class="btn" style="background:#dc3545; color:white; padding:5px 10px;" onclick="this.parentElement.parentElement.remove()">X</button>
         </div>
-        <input type="text" class="exp-position" placeholder="Position">
+        <input type="text" class="exp-position" placeholder="e.g., Junior Analyst">
         <label>Duration</label>
-        <input type="text" class="exp-duration" placeholder="Duration">
+        <input type="text" class="exp-duration" placeholder="e.g., 2018 - 2020">
         <label>Description (comma-separated for bullets)</label>
-        <textarea class="exp-desc" rows="3" placeholder="Description"></textarea>
+        <textarea class="exp-desc" rows="3" placeholder="e.g., Analyzed data trends, Prepared weekly reports"></textarea>
     `;
     container.appendChild(div);
 }
@@ -46,11 +46,11 @@ function addEducation() {
             <label>Degree ${educationCount}</label>
             <button type="button" class="btn" style="background:#dc3545; color:white; padding:5px 10px;" onclick="this.parentElement.parentElement.remove()">X</button>
         </div>
-        <input type="text" class="edu-degree" placeholder="Degree">
+        <input type="text" class="edu-degree" placeholder="e.g., Master of Arts">
         <label>Institution</label>
-        <input type="text" class="edu-institution" placeholder="Institution">
+        <input type="text" class="edu-institution" placeholder="e.g., Lorem Ipsum Institute">
         <label>Year</label>
-        <input type="text" class="edu-year" placeholder="Year">
+        <input type="text" class="edu-year" placeholder="e.g., 2021">
     `;
     container.appendChild(div);
 }
@@ -114,7 +114,6 @@ function generateResume() {
         </div>` : '';
 
     // Assemble Resume
-    // Note: The template literals below use backticks (`) and ${var} syntax
     const resumeHTML = `
         <div class="resume-header">
             <h1>${name}</h1>
@@ -152,12 +151,11 @@ function exportPDF() {
     const element = document.getElementById('resume');
     const opt = {
         margin:       0.5,
-        filename:     'my-resume.pdf',
+        filename:     'resume.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
     
-    // Promise-based usage
     html2pdf().set(opt).from(element).save();
 }
