@@ -147,11 +147,16 @@
         let educationCount = 1;
 
         function selectTheme(themeId) {
-            currentTheme = themeId;
-            document.getElementById('themeSection').classList.remove('active');
-            document.getElementById('formSection').classList.add('active');
-            // Apply theme preview if needed
-            document.body.className = 'theme-' + ['classic', 'modern', 'minimal', 'corporate', 'elegant'][themeId - 1];
+    currentTheme = themeId;
+
+    // Hide theme selector and show form
+    document.getElementById('themeSection').classList.remove('active');
+    document.getElementById('formSection').classList.add('active');
+
+    // Apply selected theme class (remove previous theme classes first)
+    const themes = ['classic', 'modern', 'minimal', 'corporate', 'elegant'];
+    document.body.classList.remove('theme-classic', 'theme-modern', 'theme-minimal', 'theme-corporate', 'theme-elegant');
+    document.body.classList.add('theme-' + themes[themeId - 1]);
         }
 
         function addExperience() {
